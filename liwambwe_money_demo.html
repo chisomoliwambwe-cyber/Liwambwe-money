@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ny">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIWAMBWE MONEY — Demo</title>
+<style>
+:root{color-scheme:dark;--bg:#07110d;--panel:#101f18;--panel2:#172a20;--green:#24d17e;--text:#f3fff7;--muted:#a8b9ae;--line:#2a4034;--gold:#f4c95d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{width:min(100%,480px);margin:0 auto;min-height:100vh;padding:22px 18px 34px;background:linear-gradient(180deg,#0d2016 0%,#07110d 50%)}
+header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.logo{width:48px;height:48px;border-radius:15px;background:var(--green);color:#042111;display:grid;place-items:center;font-weight:900;font-size:19px}
+h1{font-size:20px;letter-spacing:.7px;margin:0}
+.sub{font-size:12px;color:var(--muted);margin-top:3px}
+.pill{margin-left:auto;border:1px solid #826d32;color:var(--gold);font-size:11px;border-radius:99px;padding:6px 9px}
+h2{font-size:24px;margin:18px 0 6px}
+.intro{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:17px;margin:14px 0}
+label{display:block;color:var(--muted);font-size:12px;margin:0 0 8px}
+input,select{width:100%;background:#07130d;border:1px solid var(--line);border-radius:12px;color:var(--text);padding:14px;font:inherit;outline:none}
+input:focus,select:focus{border-color:var(--green)}
+.amount{font-size:28px;font-weight:750;letter-spacing:.3px}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}
+.key{border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);padding:14px 8px;font-size:19px;font-weight:650}
+.key:active{background:#24523a}
+.key.alt{color:var(--green)}
+.small{font-size:12px;color:var(--muted);line-height:1.45}
+.primary{width:100%;border:0;border-radius:13px;background:var(--green);color:#042111;font-weight:800;font-size:15px;padding:16px;margin-top:14px}
+.secondary{width:100%;border:1px solid var(--line);border-radius:13px;background:transparent;color:var(--text);font-weight:650;padding:13px;margin-top:9px}
+.notice{display:none;margin-top:14px;padding:13px;border-radius:12px;background:#142d20;border:1px solid #2b6847;line-height:1.5;font-size:13px}
+footer{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="logo">LM</div>
+  <div><h1>LIWAMBWE MONEY</h1><div class="sub">Mobile payments • Malawi</div></div>
+  <div class="pill">DEMO</div>
+</header>
+<h2>Landirani malipiro</h2>
+<p class="intro">Lowetsani nambala ya munthu amene akufuna kulipira, sankhani njira yolipirira, kenako lembani ndalama.</p>
+<section class="card">
+  <label for="phone">Nambala ya foni ya wolipira</label>
+  <input id="phone" inputmode="numeric" maxlength="10" placeholder="09XXXXXXXX" autocomplete="off">
+  <div class="keypad" aria-label="Keypad ya nambala">
+    <button class="key" data-key="1">1</button><button class="key" data-key="2">2</button><button class="key" data-key="3">3</button>
+    <button class="key" data-key="4">4</button><button class="key" data-key="5">5</button><button class="key" data-key="6">6</button>
+    <button class="key" data-key="7">7</button><button class="key" data-key="8">8</button><button class="key" data-key="9">9</button>
+    <button class="key alt" data-key="clear">C</button><button class="key" data-key="0">0</button><button class="key alt" data-key="back">⌫</button>
+  </div>
+</section>
+<section class="card">
+  <label for="provider">Njira yolipirira</label>
+  <select id="provider"><option>Airtel Money</option><option>TNM Mpamba</option></select>
+  <div style="height:15px"></div>
+  <label for="amount">Ndalama (MWK)</label>
+  <input id="amount" class="amount" inputmode="numeric" placeholder="0" maxlength="9">
+  <div style="height:13px"></div>
+  <label for="recipient">Nambala yanu yolandirira (ikani nambala yanu pano)</label>
+  <input id="recipient" inputmode="numeric" maxlength="10" placeholder="09XXXXXXXX">
+  <p class="small">Demo iyi siyitumiza ndalama. Nambala yolandirira iyenera kutsimikiziridwa ndi inu musanagwiritse ntchito njira yolipirira yeniyeni.</p>
+  <button id="review" class="primary">ONANI ZIMENE MWALOWETSA</button>
+  <button id="reset" class="secondary">YAMBIRANINSO</button>
+  <div id="notice" class="notice" role="status"></div>
+</section>
+<footer>LIWAMBWE MONEY • Prototype yokha • Palibe ndalama zenizeni zomwe zikusamutsidwa</footer>
+</main>
+<script>
+const phone=document.getElementById('phone');
+document.querySelectorAll('[data-key]').forEach(btn=>btn.addEventListener('click',()=>{
+ const k=btn.dataset.key;
+ if(k==='clear') phone.value='';
+ else if(k==='back') phone.value=phone.value.slice(0,-1);
+ else if(phone.value.length<10) phone.value+=k;
+}));
+const notice=document.getElementById('notice');
+document.getElementById('review').addEventListener('click',()=>{
+ const p=phone.value.trim(), r=document.getElementById('recipient').value.trim();
+ const a=Number(document.getElementById('amount').value);
+ const provider=document.getElementById('provider').value;
+ if(!/^0[0-9]{9}$/.test(p)){notice.style.display='block';notice.textContent='Chonde lowetsani nambala ya foni ya manambala 10, mwachitsanzo 09XXXXXXXX.';return;}
+ if(!Number.isFinite(a)||a<=0){notice.style.display='block';notice.textContent='Chonde lowetsani ndalama zoposa MWK 0.';return;}
+ if(!/^0[0-9]{9}$/.test(r)){notice.style.display='block';notice.textContent='Lowetsani nambala yanu yolandirira ya manambala 10.';return;}
+ notice.style.display='block';
+ notice.textContent=`KUYESA KOKHA — Njira: ${provider}. Wolipira: ${p}. Wolandira: ${r}. Ndalama: MWK ${a.toLocaleString('en-US')}. Palibe malipiro omwe atumizidwa.`;
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ phone.value='';document.getElementById('amount').value='';document.getElementById('recipient').value='';notice.style.display='none';notice.textContent='';
+});
+</script>
+</body>
+</html>
